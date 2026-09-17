@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RescateAlimento | Panel de Liderazgo</title>
+    <style>
+        /* Estilos base con diseño futurista */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: linear-gradient(135deg, #090d16 0%, #05070c 100%); 
+            color: #f1f5f9; 
+            padding: 15px; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Contenedor principal tipo App Móvil */
+        .app-container { 
+            background: rgba(30, 41, 59, 0.4); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px; 
+            padding: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); 
+            border: 1px solid rgba(255,255,255,0.05);
+            max-width: 450px; 
+            width: 100%;
+        }
+
+        /* Encabezado */
+        .header { text-align: center; margin-bottom: 24px; }
+        .logo { font-size: 42px; margin-bottom: 8px; filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.3)); }
+        h1 { color: #ffffff; font-size: 26px; font-weight: 8px; letter-spacing: -0.5px; }
+        .subtitle { color: #94a3b8; font-size: 14px; margin-top: 4px; font-weight: 500; }
+
+        /* Tarjeta de bienvenida */
+        .welcome-box { background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.03); }
+        h3 { color: #3b82f6; font-size: 18px; margin-bottom: 8px; font-weight: 600; }
+        p { color: #cbd5e1; font-size: 14.5px; line-height: 1.6; }
+
+        /* Sección de Cronograma */
+        .timeline { margin-bottom: 24px; }
+        .section-title { font-size: 13px; text-transform: uppercase; color: #64748b; letter-spacing: 1px; margin-bottom: 12px; font-weight: 700; }
+        .step { display: flex; align-items: flex-start; margin-bottom: 14px; position: relative; }
+        .step-badge { width: 24px; height: 24px; background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; border-radius: 50%; color: #3b82f6; font-size: 12px; font-weight: bold; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
+        .step-content { font-size: 14px; color: #e2e8f0; }
+        .step-content strong { color: #ffffff; }
+
+        /* Bloque de Confianza Estilo Alerta de Sistema */
+        .trust-card { 
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.03) 100%); 
+            padding: 18px; 
+            border-radius: 16px; 
+            border: 1px solid rgba(16, 185, 129, 0.2); 
+            margin-bottom: 24px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .trust-card h4 { color: #10b981; font-size: 15px; margin-bottom: 6px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .trust-code { font-family: 'Courier New', Courier, monospace; background: #090d16; padding: 10px; border-radius: 8px; color: #34d399; font-size: 13.5px; border-left: 3px solid #10b981; margin-top: 8px; line-height: 1.5; }
+
+        /* Botón/Cierre */
+        .cta-box { text-align: center; padding: 12px; background: #3b82f6; border-radius: 14px; font-weight: 600; font-size: 15px; color: #ffffff; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); text-shadow: 0 1px 2px rgba(0,0,0,0.2); animation: pulse 2s infinite; }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 4px 25px rgba(59, 130, 246, 0.6); }
+            100% { transform: scale(1); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Encabezado con efecto de brillo -->
+        <div class="header">
+            <div class="logo">🍎</div>
+            <h1>RescateAlimento</h1>
+            <div class="subtitle">Samsung Innovation Campus 2026</div>
+        </div>
+
+        <!-- Mensaje de Introducción -->
+        <div class="welcome-box">
+            <h3>¡Hola equipo! 👋</h3>
+            <p>Quería pasar a saludarlos antes de la clase de mañana. Como la profe va a armar salas separadas por cada rol, vamos a estar divididos en el Zoom/Meet, pero quería dejarles esta mini interfaz de organización.</p>
+        </div>
+
+        <!-- Cronograma Visual -->
+        <div class="timeline">
+            <div class="section-title">🗓️ Roadmap del Proyecto</div>
+            <div class="step">
+                <div class="step-badge">01</div>
+                <div class="step-content"><strong>Septiembre:</strong> Fase de diseño. Definiremos a fondo la idea y los primeros datasets de competidores.</div>
+            </div>
+            <div class="step">
+                <div class="step-badge">02</div>
+                <div class="step-content"><strong>Octubre:</strong> Fase de ingeniería. Desarrollo del Web Scraper, el algoritmo de IA y el Dashboard.</div>
+            </div>
+            <div class="step">
+                <div class="step-badge">03</div>
+                <div class="step-content"><strong>Noviembre:</strong> Fase de negocio. Lanzamiento del portafolio en redes, el video demostrativo y el Pitch final.</div>
+            </div>
+        </div>
+
+        <!-- Cláusula de Confianza e Integridad -->
+        <div class="trust-card">
+            <h4>🤝 Protocolo de Confianza Mutua</h4>
+            <p>De mi parte voy a dar el 100% para coordinar y facilitarles el camino como Business Analyst, pero lo más valioso es que seamos un grupo transparente:</p>
+            <div class="trust-code">
+                // Regla de Oro:<br>
+                Si te trabas con el código, no sabes cómo resolver un bug o andas sin tiempo, se avisa en el grupo. Nos apoyamos y lo resolvemos juntos. Aprendemos en equipo.
+            </div>
+        </div>
+
+        <!-- Mensaje de Cierre Animado -->
+        <div class="cta-box">
+            ¡Mañana prestamos atención a full y al salir armamos la estrategia! ¡Vamos a romperla! 🚀🔥
+        </div>
+    </div>
+
+</body>
+</html>
