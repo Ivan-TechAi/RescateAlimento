@@ -7,8 +7,8 @@ Bienvenidos al repositorio oficial de **RescateAlimento**, nuestro proyecto fina
 ## ¿Qué es RescateAlimento?
 Es una solución tecnológica de **Inteligencia Competitiva** impulsada por Inteligencia Artificial. El proyecto busca resolver una problemática económica y social crítica: el desperdicio de alimentos cerca de su fecha de vencimiento en comercios y almacenes de barrio.
 
-### 📉 El Problema
-Los supermercados y almacenes de cercanía tiran toneladas de comida que está por vencer debido a la falta de herramientas para calcular rebajas rápidas y competitivas, perdiendo toda su inversión (merma).
+### El Problema
+Los almacenes de cercanía tiran y pierden comida que está por vencer debido a la falta de herramientas para calcular rebajas rápidas y competitivas, perdiendo toda su inversión (merma).
 
 ### Nuestra Solución
 *   **Extracción Avanzada (Web Scraping):** Monitorea en tiempo real los precios de productos idénticos en grandes cadenas de supermercados competidoras.
