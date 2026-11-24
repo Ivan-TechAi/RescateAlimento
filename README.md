@@ -68,10 +68,10 @@ RescateAlimento tiene tres piezas que trabajan juntas:
 
 | Menú | Qué hace |
 |---|---|
-| 📦 Cargar productos | Alta de lotes por **foto del EAN** o por **factura PDF**, con precios sugeridos desde el catálogo de la competencia |
-| 📊 Stock y Ventas | Carga de ventas (`.csv`/`.xlsx` o **foto de cuaderno**) con vista previa y confirmación; stock actual con semáforo 🔴🟠🟢 |
-| 🎯 Score de Rescate | Ranking de lotes (0–100) con la acción recomendada y el precio sugerido |
-| 🔔 Notificaciones | *(próxima versión)* |
+| Cargar productos | Alta de lotes por **foto del EAN** o por **factura PDF**, con precios sugeridos desde el catálogo de la competencia |
+| Stock y Ventas | Carga de ventas (`.csv`/`.xlsx` o **foto de cuaderno**) con vista previa y confirmación; stock actual con semáforo 🔴🟠🟢 |
+| Score de Rescate | Ranking de lotes (0–100) con la acción recomendada y el precio sugerido |
+| Notificaciones | *(próxima versión)* |
 
 
 ## Datos
