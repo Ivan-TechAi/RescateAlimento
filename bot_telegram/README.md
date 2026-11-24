@@ -1,13 +1,13 @@
-# 🍎 RescateAlimento · DataByte Bot (v02.7)
+#RescateAlimento · DataByte Bot (v02.7)
 
 > Bot de Telegram que ayuda a comercios de alimentos a **vender antes de que venza la mercadería**, reduciendo el desperdicio y las pérdidas.
 > Proyecto **DataByte.io** — Samsung Innovation Campus (Capstone).
 
-## 🎯 Problema que resolvemos
+## Problema que resolvemos
 
 Los comercios pequeños pierden dinero y desperdician alimentos porque no saben **qué lote bajar de precio, cuándo y cuánto**. RescateAlimento convierte los datos de stock, ventas y precios de la competencia en una **recomendación concreta y explicable**.
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 | Menú | Qué hace |
 |---|---|
@@ -16,13 +16,13 @@ Los comercios pequeños pierden dinero y desperdician alimentos porque no saben 
 | 🎯 Score de Rescate | Ranking de lotes (0–100) con acción recomendada: bajar precio, reforzar, liquidar/donar o retirar |
 | 🔔 Notificaciones | *(próxima versión)* |
 
-## 🧠 Modelo de decisión
+## Modelo de decisión
 
 **Score de Rescate = 40 % Urgencia + 25 % Ritmo de venta + 20 % Valor en riesgo + 15 % Precio vs competencia**
 
 Es un modelo **estadístico y explicable** (índice compuesto + media móvil + reglas de negocio), elegido sobre Machine Learning porque hay pocos datos por comercio y el comerciante necesita entender *por qué* se le recomienda algo. Detalle en [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md).
 
-## 🏗️ Arquitectura
+## Arquitectura
 
 ```
 Telegram ⇄ Bot (Python) ⇄ n8n (webhooks) ⇄ Google Sheets
@@ -33,7 +33,7 @@ Telegram ⇄ Bot (Python) ⇄ n8n (webhooks) ⇄ Google Sheets
 
 > ⚠️ Este repositorio contiene **solo el bot**. Los workflows de n8n, el dashboard de Looker Studio y el resto del proyecto viven en otros repositorios/carpetas.
 
-## 📁 Estructura
+## Estructura
 
 ```
 ├── main.py                # Punto de entrada
@@ -58,7 +58,7 @@ Telegram ⇄ Bot (Python) ⇄ n8n (webhooks) ⇄ Google Sheets
 └── utils.py               # Utilidades compartidas
 ```
 
-## 🚀 Instalación
+## Instalación
 
 Requiere **Python 3.10+** (usa `zoneinfo`). En Linux, `pyzbar` necesita `sudo apt install libzbar0`.
 
@@ -76,7 +76,7 @@ python main.py
 
 Para actualizar el dashboard: `python exportar_dashboard.py` (se puede programar cada hora).
 
-## 🔐 Configuración y secretos
+## Configuración y secretos
 
 Ningún secreto va en el código. Todo se define en `.env` (ignorado por Git):
 
@@ -88,7 +88,7 @@ Ningún secreto va en el código. Todo se define en `.env` (ignorado por Git):
 | `GOOGLE_CREDENTIALS_FILE` | JSON de la cuenta de servicio de Google |
 | `ANTHROPIC_API_KEY` | Opcional: activa la lectura del cuaderno |
 
-## 📄 Formato del archivo de ventas
+## Formato del archivo de ventas
 
 ```csv
 ean,producto,marca,cantidad_unitarias,precio_unidad,fecha_vendio,id_lote
@@ -97,10 +97,7 @@ ean,producto,marca,cantidad_unitarias,precio_unidad,fecha_vendio,id_lote
 
 Se usan `id_lote`, `ean`, `cantidad_unitarias`, `precio_unidad` y `fecha_vendido`. Acepta variantes de nombres de columna y separadores `,` `;` o tab.
 
-## 👥 Equipo
 
-DataByte.io — *(agregá acá los nombres del equipo)*
+## Licencia
 
-## 📜 Licencia
-
-*(Elegí una: MIT, Apache-2.0, o "Todos los derechos reservados" si el proyecto es privado.)*
+*(MIT, Apache-2.0, Todos los derechos reservados.)*
