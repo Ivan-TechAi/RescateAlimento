@@ -1,0 +1,142 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "05896378-c880-4714-b944-bd0c6a8c91aa",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "d2a1a851-f0cd-4f09-bc34-4833ba3c193a",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "05896378-c880-4714-b944-bd0c6a8c91aa"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VmlgeuHiSF92oZ40OsDMORMrDjnXzwl5tXsvrgu0iq0",
+          "mode": "list",
+          "cachedResultName": "Databyte_DB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmlgeuHiSF92oZ40OsDMORMrDjnXzwl5tXsvrgu0iq0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 838572171,
+          "mode": "list",
+          "cachedResultName": "Productos_Apify",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmlgeuHiSF92oZ40OsDMORMrDjnXzwl5tXsvrgu0iq0/edit#gid=838572171"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ean",
+              "lookupValue": "={{ $json.query.ean.toString() }}"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "id": "472b17c4-7ba9-43de-92a0-761a7bfbcc2d",
+      "name": "Get row(s) in sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        0
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "w6ZGuHwSaHb4X6lr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const fila = $input.first().json || {};\nconst req = $('Webhook').first().json;\nconst eanBuscado = String((req.query && req.query.ean) || (req.body && req.body.ean) || '');\nconst precioRaw = (req.query && req.query.precio) ?? (req.body && req.body.precio);\n\n// Normaliza precios tipo \"$ 12.000,50\", \"12000.5\" o 12000\nfunction parsePrecio(v) {\n  if (v === undefined || v === null || v === '') return null;\n  if (typeof v === 'number') return v;\n  let s = String(v).replace(/[^0-9.,]/g, '');\n  const puntos = s.split('.').length - 1;\n  if (s.includes(',')) s = s.split('.').join('').replace(',', '.');\n  else if (puntos > 1) s = s.split('.').join('');\n  const n = parseFloat(s);\n  return isNaN(n) ? null : n;\n}\n\nconst precioUsuario = parsePrecio(precioRaw);\n\n// Producto no encontrado en la hoja\nif (Object.keys(fila).length === 0 || !fila.ean) {\n  return [{ json: { encontrado: false, ean: eanBuscado, precio_usuario: precioUsuario, score: null, mensaje: 'Producto no encontrado' } }];\n}\n\nconst min = parsePrecio(fila.precio_min_producto);\nconst max = parsePrecio(fila.precio_max_producto);\nconst clamp = (v) => Math.max(0, Math.min(100, v));\n\n// 30% Precio: igual al minimo = 100, igual al maximo = 0\nlet scorePrecio = null;\nif (precioUsuario !== null && precioUsuario > 0 && min !== null && max !== null) {\n  if (max > min) scorePrecio = clamp((max - precioUsuario) / (max - min) * 100);\n  else scorePrecio = precioUsuario <= min ? 100 : 0;\n}\n\n// 15% Promociones: sin datos de promo todavia, se excluye del calculo\nconst tienePromo = false;\nconst scorePromo = null; // futuro: descuento o cercania al vencimiento\n\n// Sin datos en la hoja todavia (se excluyen y se reparte su peso)\nconst scoreRating = null;   // futuro: (rating / 5) * 100\nconst scoreReviews = null;  // futuro: Math.min(100, Math.log10(n + 1) / 3 * 100)\nconst scoreCrecimiento = null;\n\nconst partes = [\n  [0.30, scorePrecio],\n  [0.25, scoreRating],\n  [0.20, scoreReviews],\n  [0.15, scorePromo],\n  [0.10, scoreCrecimiento],\n].filter((p) => p[1] !== null);\n\nlet score = null;\nif (scorePrecio !== null) {\n  const pesoTotal = partes.reduce((s, p) => s + p[0], 0);\n  score = Math.round(partes.reduce((s, p) => s + p[0] * p[1], 0) / pesoTotal * 10) / 10;\n}\n\nreturn [{\n  json: {\n    encontrado: true,\n    ean: String(fila.ean),\n    nombre: fila.producto,\n    marca: fila.marca,\n    categoria: fila.categoria,\n    comercio: fila.comercio,\n    imagen_url: fila.imagen,\n    precio_usuario: precioUsuario,\n    precio_lista: parsePrecio(fila.precio_lista),\n    precio_min: min,\n    precio_max: max,\n    tiene_promo: tienePromo,\n    score_precio: scorePrecio === null ? null : Math.round(scorePrecio * 10) / 10,\n    score_promociones: scorePromo,\n    score: score,\n    mensaje: score === null ? 'Falta el precio ingresado para calcular el score' : 'ok',\n  },\n}];"
+      },
+      "id": "40bcedcb-6016-4535-9023-36fdcebda722",
+      "name": "Calcular Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "fb8b20b3-5e36-4b58-99a2-c9f9c9f8612a",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        672,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Calcular Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calcular Score": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "891e4e69-8938-4a39-acfc-ba5387baba80",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6dc2fa2f1ab37e9153d07531d65a081e9199d7d97c7a2e003e9d2cf352ed6698"
+  },
+  "nodeGroups": [],
+  "id": "XLxu5NF0Gp9ihEqH",
+  "tags": []
+}

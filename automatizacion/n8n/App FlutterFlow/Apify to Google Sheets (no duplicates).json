@@ -1,0 +1,535 @@
+{
+  "name": "Apify to Google Sheets (no duplicates)",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/reverential_poolside~my-actor/runs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "13235cb6-0ad7-4f09-9084-85cc7173cbcc",
+      "name": "Start Apify run",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        272,
+        208
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "jgyiR86ONRkQ3czZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 0.1
+      },
+      "id": "31f510c0-4e2f-4e00-88bc-b1d29edefa04",
+      "name": "Wait 2 minutes",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        496,
+        80
+      ],
+      "webhookId": "b26cc4a6-4e00-47e7-9792-6c80bf7833e9"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.apify.com/v2/actor-runs/{{ $json.data.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "443a303f-2b75-4825-b769-b9a141c6a0bf",
+      "name": "Check run status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        720,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "jgyiR86ONRkQ3czZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.data.status }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "rightValue": "SUCCEEDED"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Succeeded"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.data.status }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "rightValue": "RUNNING"
+                  },
+                  {
+                    "leftValue": "={{ $json.data.status }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "rightValue": "READY"
+                  }
+                ],
+                "combinator": "or"
+              },
+              "renameOutput": true,
+              "outputKey": "Still running"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d51f450c-e20c-44d6-ae23-712c5e056f71",
+      "name": "Run finished?",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        944,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.apify.com/v2/datasets/{{ $json.data.defaultDatasetId }}/items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "49b2b79c-50e7-4369-b530-ea4c0c85fe93",
+      "name": "Get latest Apify results",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        800,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "jgyiR86ONRkQ3czZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "maxItems": 60
+      },
+      "id": "4cf59f5c-9de5-476f-a01e-d9882f2a9e96",
+      "name": "Limit",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1VmlgeuHiSF92oZ40OsDMORMrDjnXzwl5tXsvrgu0iq0",
+          "mode": "list",
+          "cachedResultName": "Databyte_DB",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmlgeuHiSF92oZ40OsDMORMrDjnXzwl5tXsvrgu0iq0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 838572171,
+          "mode": "list",
+          "cachedResultName": "Productos_Apify",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VmlgeuHiSF92oZ40OsDMORMrDjnXzwl5tXsvrgu0iq0/edit#gid=838572171"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "clave": "={{ $json.ean }}|{{ $json.comercio }}|{{ $json.direccion }}",
+            "categoria": "={{ $json.categoria }}",
+            "comercio": "={{ $json.comercio }}",
+            "direccion": "={{ $json.direccion }}",
+            "ean": "={{ $json.ean }}",
+            "imagen": "={{ $json.imagen }}",
+            "latitud": "={{ $json.latitud }}",
+            "localidad": "={{ $json.localidad }}",
+            "longitud": "={{ $json.longitud }}",
+            "marca": "={{ $json.marca }}",
+            "precio_lista": "={{ $json.precio_lista }}",
+            "precio_max_producto": "={{ $json.precio_max_producto }}",
+            "precio_min_producto": "={{ $json.precio_min_producto }}",
+            "presentacion": "={{ $json.presentacion }}",
+            "producto": "={{ $json.producto }}",
+            "provincia": "={{ $json.provincia }}"
+          },
+          "matchingColumns": [
+            "clave"
+          ],
+          "schema": [
+            {
+              "id": "clave",
+              "displayName": "clave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "categoria",
+              "displayName": "categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "comercio",
+              "displayName": "comercio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "direccion",
+              "displayName": "direccion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ean",
+              "displayName": "ean",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "imagen",
+              "displayName": "imagen",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "latitud",
+              "displayName": "latitud",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "localidad",
+              "displayName": "localidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "longitud",
+              "displayName": "longitud",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "marca",
+              "displayName": "marca",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "precio_lista",
+              "displayName": "precio_lista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "precio_max_producto",
+              "displayName": "precio_max_producto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "precio_min_producto",
+              "displayName": "precio_min_producto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "presentacion",
+              "displayName": "presentacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "producto",
+              "displayName": "producto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "provincia",
+              "displayName": "provincia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "b7ccc52b-4a14-481e-a06b-4056ef96f21f",
+      "name": "Add or update rows in Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1248,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "w6ZGuHwSaHb4X6lr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "monthsInterval": 12,
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "2bee58e9-bf8c-445e-8505-8101cfd4462f",
+      "name": "Cada dia",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start Apify run": {
+      "main": [
+        [
+          {
+            "node": "Wait 2 minutes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 2 minutes": {
+      "main": [
+        [
+          {
+            "node": "Check run status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check run status": {
+      "main": [
+        [
+          {
+            "node": "Run finished?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run finished?": {
+      "main": [
+        [
+          {
+            "node": "Get latest Apify results",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 2 minutes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get latest Apify results": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Add or update rows in Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cada dia": {
+      "main": [
+        [
+          {
+            "node": "Start Apify run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "aea7b377-4dcf-4e2a-a52f-a14f74344d07",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6dc2fa2f1ab37e9153d07531d65a081e9199d7d97c7a2e003e9d2cf352ed6698"
+  },
+  "nodeGroups": [
+    {
+      "id": "8fafe61a-5288-451e-8b3e-983f830053bb",
+      "name": "Run the scraper",
+      "nodeIds": [
+        "13235cb6-0ad7-4f09-9084-85cc7173cbcc",
+        "31f510c0-4e2f-4e00-88bc-b1d29edefa04",
+        "443a303f-2b75-4825-b769-b9a141c6a0bf",
+        "d51f450c-e20c-44d6-ae23-712c5e056f71"
+      ],
+      "description": "Inicia una nueva ejecución del scraper y realiza comprobaciones cada 2 minutos hasta que finaliza; las ejecuciones fallidas se detienen aquí."
+    },
+    {
+      "id": "4de29829-71fe-4eb5-8969-24bf3d527ec2",
+      "name": "Save products to sheet",
+      "nodeIds": [
+        "49b2b79c-50e7-4369-b530-ea4c0c85fe93",
+        "4cf59f5c-9de5-476f-a01e-d9882f2a9e96",
+        "b7ccc52b-4a14-481e-a06b-4056ef96f21f"
+      ],
+      "description": "Descarga los resultados de la ejecución finalizada y los inserta o actualiza en la hoja de productos, con una fila por cada producto y tienda."
+    }
+  ],
+  "id": "b4x7wjvAo1eNfWh5",
+  "tags": []
+}

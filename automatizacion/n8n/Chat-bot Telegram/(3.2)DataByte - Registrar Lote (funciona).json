@@ -1,0 +1,432 @@
+{
+  "name": "(3.2)DataByte - Registrar Lote (funciona)",
+  "nodes": [
+    {
+      "parameters": {
+        "fieldToSplitOut": "body.lotes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        0
+      ],
+      "id": "8c9c7438-49cf-46b0-9aa0-7627effb7d38",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g",
+          "mode": "list",
+          "cachedResultName": "DataByte_Rescate_Alimentos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2144041125,
+          "mode": "list",
+          "cachedResultName": "Lotes_Registrados",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g/edit#gid=2144041125"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ean": "={{ $json.ean }}",
+            "fecha_registro": "={{ $json.fecha_registro }}",
+            "producto": "={{ $json.producto }}",
+            "marca": "={{ $json.marca }}",
+            "precio_venta": "={{ $json.precio_venta }}",
+            "cantidad": "={{ $json.cantidad }}",
+            "fecha_caducidad": "={{ $json.fecha_caducidad }}",
+            "id_lote": "={{ $json.id_lote }}",
+            "telegram_id": "={{ $('Webhook1').item.json.body.lotes[1].telegram_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_lote",
+              "displayName": "id_lote",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telegram_id",
+              "displayName": "telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ean",
+              "displayName": "ean",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fecha_registro",
+              "displayName": "fecha_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fecha_actualizacion",
+              "displayName": "fecha_actualizacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "tiempo_restante",
+              "displayName": "tiempo_restante",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "producto",
+              "displayName": "producto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "marca",
+              "displayName": "marca",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "precio_venta",
+              "displayName": "precio_venta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cantidad",
+              "displayName": "cantidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fecha_caducidad",
+              "displayName": "fecha_caducidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        736,
+        0
+      ],
+      "id": "b3f60f93-1e5e-4dc9-96de-992a3a3d0e8f",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mXKYKbu95IpXhMVE",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "registrar-lote",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        144
+      ],
+      "id": "51bf7afb-b596-44c4-84b7-1f4fab41e473",
+      "name": "Webhook1",
+      "webhookId": "bc487de4-5fd1-4036-8f24-218626f2eef2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "c64d4198-e9e2-4a4d-b93c-d5c594f3cf5f",
+              "leftValue": "={{ $json.body.lotes }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        224,
+        144
+      ],
+      "id": "fafda9a6-3122-405d-8b94-4257e3d7a0ca",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g",
+          "mode": "list",
+          "cachedResultName": "DataByte_Rescate_Alimentos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2144041125,
+          "mode": "list",
+          "cachedResultName": "Lotes_Registrados",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g/edit#gid=2144041125"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ean": "={{ $json.body.ean }}",
+            "fecha_registro": "={{ $json.body.fecha_registro }}",
+            "producto": "={{ $json.body.producto }}",
+            "marca": "={{ $json.body.marca }}",
+            "precio_venta": "={{ $json.body.precio_venta }}",
+            "cantidad": "={{ $json.body.cantidad }}",
+            "fecha_caducidad": "={{ $json.body.fecha_caducidad }}",
+            "id_lote": "={{ $json.body.id_lote }}",
+            "telegram_id": "={{ $json.body.telegram_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_lote",
+              "displayName": "id_lote",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "telegram_id",
+              "displayName": "telegram_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ean",
+              "displayName": "ean",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fecha_registro",
+              "displayName": "fecha_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "producto",
+              "displayName": "producto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "marca",
+              "displayName": "marca",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "precio_venta",
+              "displayName": "precio_venta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cantidad",
+              "displayName": "cantidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fecha_caducidad",
+              "displayName": "fecha_caducidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        480,
+        224
+      ],
+      "id": "476b36e1-030a-4827-898f-e87d525de2a0",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mXKYKbu95IpXhMVE",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "633e4d73-d7b5-4a93-a40b-1d3cd53e1166",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c2252a7b85f535d37fe7bbedd8ae3bd05ec90261322dbfaa2d5dbe11811aa676"
+  },
+  "nodeGroups": [],
+  "id": "RAsjJLewurESpzAq",
+  "tags": []
+}

@@ -1,0 +1,184 @@
+{
+  "name": "DataByte - Buscar Usuario",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "buscar-usuario",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "05d3764f-bbc1-42b9-b710-8c6cce50ddc9",
+      "name": "Webhook",
+      "webhookId": "325a928b-50d5-47ee-ba55-5d803f26244d"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g",
+          "mode": "list",
+          "cachedResultName": "DataByte_Rescate_Alimentos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1283852367,
+          "mode": "list",
+          "cachedResultName": "Usuarios_Registrados",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g/edit#gid=1283852367"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "telegram_id",
+              "lookupValue": "={{ String($json.body.telegram_id) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        0
+      ],
+      "id": "f3984d0c-826a-47f8-afed-dfc9805fbc80",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mXKYKbu95IpXhMVE",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "ad9f8e2b-8f70-46b7-b701-958b5735acd0",
+              "leftValue": "={{ String($json.telegram_id ?? '') }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        448,
+        0
+      ],
+      "id": "88eca260-9c77-4768-8e0f-4ae47396dc1e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"encontrado\": true,\n  \"usuario\": {\n    \"telegram_id\": \"{{ $json.telegram_id }}\",\n    \"nombre\": \"{{ $json.nombre }}\",\n    \"apellido\": \"{{ $json.apellido }}\",\n    \"nombre_negocio\": \"{{ $json.nombre_negocio }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        672,
+        -96
+      ],
+      "id": "31e9d219-e388-447c-b9f9-7d69d51b20be",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"encontrado\": false,\n  \"mensaje\": \"Usuario no registrado\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        672,
+        96
+      ],
+      "id": "da3d93b9-4be5-4be5-b50d-150cced591e6",
+      "name": "Respond to Webhook1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "510d6540-00e8-43f6-83dd-52f4d095fb90",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c2252a7b85f535d37fe7bbedd8ae3bd05ec90261322dbfaa2d5dbe11811aa676"
+  },
+  "nodeGroups": [],
+  "id": "hztNIdbNBixz4WkO",
+  "tags": []
+}

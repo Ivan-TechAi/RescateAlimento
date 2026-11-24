@@ -1,0 +1,130 @@
+{
+  "name": "Buscar-Productos-Factura",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "buscar-productos-factura",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        -144,
+        288
+      ],
+      "id": "fa13ec21-cf1f-43f9-acb7-7fb7d5aac2c0",
+      "name": "Webhook",
+      "webhookId": "2e13988c-049c-43e0-bb18-05c2a2a70159"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Descargamos todas las filas que trajo el nodo de Google Sheets\nconst filasSheets = $input.all();\n\n// 2. Rescatamos el JSON original enviado por Python desde el nodo Webhook raíz\nconst eansRecibidos = $('Webhook').first().json.body.eans || [];\n\nconst resultado = {};\n\n// 3. Cruzamos los datos eficientemente usando la sintaxis nativa de JS ('of')\nfor (const ean of eansRecibidos) {\n    const eanStr = String(ean).trim();\n    \n    // Buscamos la coincidencia exacta en el maestro de tu Hoja 1\n    const coincidencia = filasSheets.find(fila => String(fila.json.ean).trim() === eanStr);\n    \n    if (coincidencia) {\n        resultado[eanStr] = {\n            \"producto\": coincidencia.json.producto || \"Producto sin nombre\",\n            \"marca\": coincidencia.json.marca || \"Genérico\",\n            \"precio_min_proc\": coincidencia.json.precio_min_proc || 0\n        };\n    } else {\n        resultado[eanStr] = {\n            \"producto\": `Producto Nuevo (${eanStr})`,\n            \"marca\": \"Genérico\",\n            \"precio_min_proc\": 0\n        };\n    }\n}\n\nreturn { json: resultado };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        288
+      ],
+      "id": "7dcc401a-4e5b-4ac3-b234-736aa74c031d",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        528,
+        288
+      ],
+      "id": "57b671ee-bdd5-4212-bdef-b08704c1aca5",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g",
+          "mode": "list",
+          "cachedResultName": "DataByte_Rescate_Alimentos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        80,
+        288
+      ],
+      "id": "554c21cd-943f-44ad-b328-5e45bebdcbf7",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mXKYKbu95IpXhMVE",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f2e357fa-757e-43f0-81cc-d4d06c033262",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c2252a7b85f535d37fe7bbedd8ae3bd05ec90261322dbfaa2d5dbe11811aa676"
+  },
+  "nodeGroups": [],
+  "id": "o3ft2yGwvjrQHVGX",
+  "tags": []
+}

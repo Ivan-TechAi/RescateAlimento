@@ -1,0 +1,114 @@
+{
+  "name": "(2)DataByte - Webhook Consulta EAN Individual Code (funciona)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "buscar-producto",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c6fe4af5-207c-44c3-8615-66bd8f00f1ba",
+      "name": "Webhook",
+      "webhookId": "d3b7b47f-73bc-457e-85c3-37c6ae429447"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g",
+          "mode": "list",
+          "cachedResultName": "DataByte_Rescate_Alimentos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kDsKOUm0M5Qu1LlXHX4g63DPwf59PL7cpq1U-5HKx7g/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ean",
+              "lookupValue": "={{ $json.body.ean }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        0
+      ],
+      "id": "9b522305-41be-4e6f-b543-ae76d408f8c6",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mXKYKbu95IpXhMVE",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "11ebbb59-d80f-4173-939d-6ae5985c6bdd",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7a1421be-47dc-49bb-b625-7d0a9de0e72e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c2252a7b85f535d37fe7bbedd8ae3bd05ec90261322dbfaa2d5dbe11811aa676"
+  },
+  "nodeGroups": [],
+  "id": "9gkSIGlEEWUfw2F2",
+  "tags": []
+}

@@ -1,0 +1,66 @@
+{
+  "lotes": [
+    {
+      "id_lote": "LOT-00005",
+      "telegram_id": 1001,
+      "ean": 7790360026578,
+      "producto": "Hamburguesas Swift 4 Un",
+      "cantidad_inicial": 311,
+      "fecha_ingreso": "2026-11-15",
+      "fecha_vencimiento": "2026-12-29",
+      "precio_base": 8180.03641781341,
+      "costo": 5200,
+      "agresividad": 0.2,
+      "vendidas": 9,
+      "cerrado": false,
+      "merma": 0
+    },
+    {
+      "id_lote": "LOT-00010",
+      "telegram_id": 1001,
+      "ean": 7790670050674,
+      "producto": "Hamburguesas Paty 2 Un",
+      "cantidad_inicial": 466,
+      "fecha_ingreso": "2026-11-01",
+      "fecha_vencimiento": "2026-12-15",
+      "precio_base": 2531.55711505331,
+      "costo": 1700,
+      "agresividad": 0.3,
+      "vendidas": 176,
+      "cerrado": false,
+      "merma": 0
+    },
+    {
+      "id_lote": "LOT-00015",
+      "telegram_id": 1001,
+      "ean": 7790000000011,
+      "producto": "Milanesas de Pollo 1 kg",
+      "cantidad_inicial": 269,
+      "fecha_ingreso": "2026-11-01",
+      "fecha_vencimiento": "2026-12-08",
+      "precio_base": 6162.92511110235,
+      "costo": 4300,
+      "agresividad": 0.2,
+      "vendidas": 91,
+      "cerrado": false,
+      "merma": 0
+    },
+    {
+      "id_lote": "LOT-00024",
+      "telegram_id": 1001,
+      "ean": 7790000000028,
+      "producto": "Yogur Entero 1 L",
+      "cantidad_inicial": 314,
+      "fecha_ingreso": "2026-11-13",
+      "fecha_vencimiento": "2026-11-29",
+      "precio_base": 2222.707327593092,
+      "costo": 1400,
+      "agresividad": 0.3,
+      "vendidas": 54,
+      "cerrado": false,
+      "merma": 0
+    }
+  ],
+  "fecha_referencia": "2026-11-23",
+  "elasticidad_precio": 1.99
+}
